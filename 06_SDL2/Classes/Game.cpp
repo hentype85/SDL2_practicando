@@ -5,7 +5,7 @@ Game::Game() {
     game_is_running = FALSE;
     window = NULL;
     renderer = NULL;
-    playerTexture = NULL;
+    spriteTexture = NULL;
 }
 // destructor
 Game::~Game() {
@@ -107,7 +107,7 @@ void Game::setup() {
     sRect.moveLEFT = false;
     sRect.moveRIGHT = false;
     // cargar la textura del personaje
-    playerTexture = load_texture("./Sprites/spritesheet00.png");
+    spriteTexture = load_texture("./Sprites/spritesheet00.png");
 }
 
 void Game::update() {
@@ -139,14 +139,14 @@ void Game::render() {
     // aqui se comienzan a dibujar los objetos del juego
 
     // definir rectangulos de cada frame de la animacion
-        SDL_Rect playerRect = { 
+    SDL_Rect srcRect = { 
         (int)(sRect.x - sRect.width * zoom * 2 / 2), // posicion x para centrar el zoom
         (int)(sRect.y - sRect.height * zoom / 2), // posicion y para centrar el zoom
         (int)(sRect.width * zoom * 2), // zoom al ancho
         (int)(sRect.height * zoom) // zoom al alto
     };
     // renderizar la textura del jugador con el rectagulo de destino modificado
-    SDL_RenderCopy(renderer, playerTexture, NULL, &playerRect);
+    SDL_RenderCopy(renderer, spriteTexture, NULL, &srcRect);
 
     // mostrar el renderizado
     SDL_RenderPresent(renderer);

@@ -51,7 +51,7 @@ class Game {
         // variables privadas
         SDL_Window *window;
         SDL_Renderer *renderer;
-        SDL_Texture *playerTexture;
+        SDL_Texture *spriteTexture;
 };
 
 #endif
