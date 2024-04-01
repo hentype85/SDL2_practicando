@@ -107,6 +107,7 @@ void Game::setup() {
     sRect.moveRIGHT = false;
     // cargar la textura de sprites
     spriteTexture = load_texture("./Sprites/spritesheet00.png");
+    currentframe = 0;
     zoom = 5.0f;
 }
 
@@ -146,13 +147,20 @@ void Game::render() {
     // cargar ancho y alto de spriteTexture en texturewidth y textureheight
     SDL_QueryTexture(spriteTexture, NULL, NULL, &texturewidth, &textureheight);
 
+    int columna = 2;
+    if (sRect.moveUP || sRect.moveDOWN || sRect.moveLEFT || sRect.moveRIGHT)
+        columna = textureheight / 2;
+    else
+        columna = 0;
+
+    // usar luego if (sRect.moveUP || sRect.moveDOWN || sRect.moveLEFT || sRect.moveRIGHT)
+    frameheight = textureheight / 2; // alto de cada frame
     framewidth = texturewidth / 6; // ancho de cada frame
-    frameheight = textureheight / 1; // alto de cada frame
 
     // definir rectangulos de origen y destino para renderizar la textura
     srcRect = {
         currentframe * framewidth, // mover frame en la fila actual
-        0, // frame en la fila 0
+        columna, // columna actual
         framewidth, // ancho de cada frame
         frameheight // alto de cada frame
     };
