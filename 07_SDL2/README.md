@@ -1,6 +1,6 @@
 # compilar programa C++ con SDL2
 
-![img](./img.png)
+![img](./img.gif)
 
 `g++ -o game main.cpp Classes/* -I ../SDL2/include -L ../SDL2/lib -lmingw32 -lSDL2main -lSDL2_image -lSDL2`
 

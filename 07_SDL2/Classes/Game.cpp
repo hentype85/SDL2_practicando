@@ -108,7 +108,7 @@ void Game::setup() {
     sRect.moveRIGHT = false;
     // cargar la textura de sprites
     spriteTexture = load_texture("./Sprites/spritesheet00.png");
-    zoom = 10.0f;
+    zoom = 5.0f;
 }
 
 void Game::update() {
@@ -158,10 +158,10 @@ void Game::render() {
         frameheight // alto de cada frame
     };
     dstRect = {
-        (int)sRect.x, // mover rectangulo de destino en eje x
-        (int)sRect.y, // mover rectangulo de destino en eje y
-        framewidth, // ancho del rectangulo de destino
-        frameheight // alto del rectangulo de destino
+        (int)(sRect.x - sRect.width * zoom / 2), // posicion x para aplicar movimiento y centrar el zoom
+        (int)(sRect.y - sRect.height * zoom / 2), // posicion y para aplicar movimiento y centrar el zoom
+        (int)(sRect.width * zoom), // aplicar zoom al ancho del sRect
+        (int)(sRect.height * zoom) // aplicar zoom al alto del sRect
     };
 
     // renderizar la textura del jugador con el rectagulo de destino modificado
