@@ -79,8 +79,8 @@ void Game::update() {
     // coordenadas basadas en el angulo del rectangulo
     sRect.x = WINDOW_WIDTH / 2; // centrar rectangulo en x
     sRect.y = WINDOW_HEIGHT / 2; // centrar rectangulo en y
-    // sBall.x += 10 * delta_time; // mover el rectangulo 10 pixeles hacia la derecha
-    // sBall.y += 10 * delta_time; // mover el rectangulo 10 pixeles hacia abajo
+    // sRect.x += 10 * delta_time; // mover el rectangulo 10 pixeles hacia la derecha
+    // sRect.y += 10 * delta_time; // mover el rectangulo 10 pixeles hacia abajo
     sRect.x += static_cast<int>(20 * cos(sRect.angle)); // oscilar el rectangulo en x
     sRect.y += static_cast<int>(20 * sin(sRect.angle)); // oscilar el rectangulo en y
 
