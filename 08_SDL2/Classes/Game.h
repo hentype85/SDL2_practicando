@@ -49,6 +49,7 @@ class Game {
         int framewidth, frameheight;
         int texturewidth, textureheight;
         int currentframe;
+        int currentRow;
         SDL_Rect srcRect;
         SDL_Rect dstRect;
 

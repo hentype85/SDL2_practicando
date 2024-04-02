@@ -108,6 +108,7 @@ void Game::setup() {
     // cargar la textura de sprites
     spriteTexture = load_texture("./Sprites/spritesheet00.png");
     currentframe = 0;
+    currentRow = 0;
     zoom = 5.0f;
 }
 
@@ -147,20 +148,26 @@ void Game::render() {
     // cargar ancho y alto de spriteTexture en texturewidth y textureheight
     SDL_QueryTexture(spriteTexture, NULL, NULL, &texturewidth, &textureheight);
 
-    int columna = 2;
-    if (sRect.moveUP || sRect.moveDOWN || sRect.moveLEFT || sRect.moveRIGHT)
-        columna = textureheight / 2;
+    if (sRect.moveDOWN)
+        currentRow = (textureheight / 5) * 1; // (altura de la textura / cantidad de filas) * fila deseada
+    else if (sRect.moveUP)
+        currentRow = (textureheight / 5) * 2; // (altura de la textura / cantidad de filas) * fila deseada
+    else if (sRect.moveLEFT)
+        currentRow = (textureheight / 5) * 3; // (altura de la textura / cantidad de filas) * fila deseada
+    else if (sRect.moveRIGHT)
+        currentRow = (textureheight / 5) * 4; // (altura de la textura / cantidad de filas) * fila deseada
     else
-        columna = 0;
+        currentRow = 0; // fila 0 (idle)
 
-    // usar luego if (sRect.moveUP || sRect.moveDOWN || sRect.moveLEFT || sRect.moveRIGHT)
-    frameheight = textureheight / 2; // alto de cada frame
+    printf("fila: %d\n", currentRow);
+
+    frameheight = textureheight / 5; // alto de cada frame
     framewidth = texturewidth / 6; // ancho de cada frame
 
     // definir rectangulos de origen y destino para renderizar la textura
     srcRect = {
         currentframe * framewidth, // mover frame en la fila actual
-        columna, // columna actual
+        currentRow, // fila actual
         framewidth, // ancho de cada frame
         frameheight // alto de cada frame
     };
@@ -170,7 +177,7 @@ void Game::render() {
         (int)(sRect.width * zoom), // aplicar zoom al ancho del sRect
         (int)(sRect.height * zoom) // aplicar zoom al alto del sRect
     };
-
+    
     // renderizar la textura del jugador con el rectagulo de destino modificado
     SDL_RenderCopy(renderer, spriteTexture, &srcRect, &dstRect);
 
