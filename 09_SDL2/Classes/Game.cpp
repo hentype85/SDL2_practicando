@@ -110,6 +110,7 @@ void Game::setup() {
     currentframe = 0;
     currentRow = 0;
     zoom = 5.0f;
+    rRect = { 300, 400, 50, 50 };
 }
 
 void Game::update() {
@@ -135,18 +136,8 @@ void Game::update() {
         sRect.x -= sRect.spd * delta_time;
     if (sRect.moveRIGHT)
         sRect.x += sRect.spd * delta_time;
-}
 
-void Game::render() {
-    // limpiar la pantalla (renderer, <Red>, <Green>, <Blue>, <Alpha/Transparencia>)
-    SDL_SetRenderDrawColor(renderer, 41, 129, 6, 255); // color verde oscuro
-    SDL_RenderClear(renderer);
-
-    // aqui se comienzan a dibujar los objetos del juego
-
-    // cargar ancho y alto de spriteTexture en texturewidth y textureheight
-    SDL_QueryTexture(spriteTexture, NULL, NULL, &texturewidth, &textureheight);
-
+    // aplicar logica de para sprites de jugador
     if (sRect.moveDOWN)
         currentRow = (textureheight / 5) * 1; // (altura de la textura / cantidad de filas) * fila deseada
     else if (sRect.moveUP)
@@ -157,8 +148,6 @@ void Game::render() {
         currentRow = (textureheight / 5) * 4; // (altura de la textura / cantidad de filas) * fila deseada
     else
         currentRow = 0; // fila 0 (idle)
-
-    printf("fila: %d\n", currentRow);
 
     frameheight = textureheight / 5; // alto de cada frame
     framewidth = texturewidth / 6; // ancho de cada frame
@@ -176,9 +165,31 @@ void Game::render() {
         (int)(sRect.width * zoom), // aplicar zoom al ancho del sRect
         (int)(sRect.height * zoom) // aplicar zoom al alto del sRect
     };
-    
+
+    // checkeo colisiones
+    check_collision(rRect);
+}
+
+void Game::render() {
+    // limpiar la pantalla (renderer, <Red>, <Green>, <Blue>, <Alpha/Transparencia>)
+    SDL_SetRenderDrawColor(renderer, 41, 129, 6, 255); // color verde oscuro
+    SDL_RenderClear(renderer);
+
+    // aqui se comienzan a dibujar los objetos del juego
+
+    // cargar ancho y alto de spriteTexture en texturewidth y textureheight
+    SDL_QueryTexture(spriteTexture, NULL, NULL, &texturewidth, &textureheight);
+
     // renderizar la textura del jugador con el rectagulo de destino modificado
     SDL_RenderCopy(renderer, spriteTexture, &srcRect, &dstRect);
+
+    // renderizar el rectangulo perimetro del dstRect
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // color verde
+    SDL_RenderDrawRect(renderer, &dstRect);
+
+    // rectangulo estatico para colision
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // color rojo
+    SDL_RenderDrawRect(renderer, &rRect);
 
     // mostrar el renderizado
     SDL_RenderPresent(renderer);
@@ -199,6 +210,17 @@ SDL_Texture *Game::load_texture(const char* path) {
     }
 
     return texture;
+}
+
+void Game::check_collision(SDL_Rect rect) {
+    // colision entre rectangulos
+    if (SDL_HasIntersection(&dstRect, &rect)) {
+        // revertir el movimiento si hay colision
+        if (sRect.moveUP) sRect.y += sRect.spd * delta_time;
+        if (sRect.moveDOWN) sRect.y -= sRect.spd * delta_time;
+        if (sRect.moveLEFT) sRect.x += sRect.spd * delta_time;
+        if (sRect.moveRIGHT) sRect.x -= sRect.spd * delta_time;
+    }
 }
 
 // destruir la ventana del juego
