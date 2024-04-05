@@ -110,7 +110,7 @@ void Game::setup() {
     currentframe = 0;
     currentRow = 0;
     zoom = 5.0f;
-    rRect = { 300, 400, 50, 50 };
+    rRect = { 0, 0, 0, 0 };
 }
 
 void Game::update() {
@@ -136,6 +136,7 @@ void Game::update() {
         sRect.x -= sRect.spd * delta_time;
     if (sRect.moveRIGHT)
         sRect.x += sRect.spd * delta_time;
+
 
     // aplicar logica de para sprites de jugador
     if (sRect.moveDOWN)
@@ -165,6 +166,9 @@ void Game::update() {
         (int)(sRect.width * zoom), // aplicar zoom al ancho del sRect
         (int)(sRect.height * zoom) // aplicar zoom al alto del sRect
     };
+
+
+    rRect = { 300, 400, 50, 50 }; // rectangulo para colision
 
     // checkeo colisiones
     check_collision(rRect);

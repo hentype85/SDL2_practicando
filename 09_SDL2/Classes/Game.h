@@ -36,7 +36,8 @@ class Game {
         // variables publicas
         int game_is_running;
 
-        SDL_Rect rRect; // rectangulo para colision
+        // rectangulo de colision
+        SDL_Rect rRect;
 
     private:
 
