@@ -148,7 +148,10 @@ void Game::update() {
     else if (sRect.moveRIGHT)
         currentRow = (textureheight / 5) * 4; // (altura de la textura / cantidad de filas) * fila deseada
     else
+    {
         currentRow = 0; // fila 0 (idle)
+        currentframe = (int)((SDL_GetTicks() / 1000) % 6); // 6 frames en las filas (idle) un poco mas lento
+    }
 
     frameheight = textureheight / 5; // alto de cada frame
     framewidth = texturewidth / 6; // ancho de cada frame
