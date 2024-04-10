@@ -31,7 +31,7 @@ copiar:
 pegar:  
     \include en - \SDL2_practicando\SDL2\include  
     \lib en - \SDL2_practicando\SDL2\lib   
-    SDL2_image.dll junto con SDL2.dll     
+    SDL2_ttf.dll junto con SDL2_image.dll y SDL2.dll    
 
 # usar g++ con MinGW
 https://code.visualstudio.com/docs/cpp/config-mingw#_prerequisites  
