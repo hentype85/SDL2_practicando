@@ -112,17 +112,16 @@ void Game::setup() {
     sRect.moveLEFT = false;
     sRect.moveRIGHT = false;
     // cargar la textura de sprites
-    spriteTexture = load_texture("./Sprites/spritesheet00.png");
-    currentframe = 0;
-    currentRow = 0;
-    zoom = 5.0f;
+    playerSprite.spriteTexture = load_texture("./Sprites/spritesheet00.png");
+    playerSprite.currentframe = 0;
+    playerSprite.currentRow = 0;
+    zoom = 6.0f;
     rRect = { 0, 0, 0, 0 };
     // flag de colision
     collision_flag = false;
-    // cargar fuente de letras
-    font = load_font("./Fonts/font.ttf", 24); // fuente de 24 de tamano
-    dialogRect = { 0, 0, 0, 0 }; // rectangulo de dialogo
-    textColor = { 0, 0, 0, 255 }; // color del texto
+    // para fuente de letras
+    bubbletxt.dialogRect = { 0, 0, 0, 0 }; // rectangulo de dialogo
+    bubbletxt.textColor = { 0, 0, 0, 255 }; // color del texto
 }
 
 void Game::update() {
@@ -135,8 +134,8 @@ void Game::update() {
 
 
     // incrementar el frame actual del sprite
-    currentframe = (int)((SDL_GetTicks() / 100) % 6); // 6 frames en las filas
-    if (currentframe > 5) currentframe = 0; // regresar al primer frame
+    playerSprite.currentframe = (int)((SDL_GetTicks() / 100) % 6); // 6 frames en las filas
+    if (playerSprite.currentframe > 5) playerSprite.currentframe = 0; // regresar al primer frame
 
 
     // aplicar movimiento utilizando delta_time solo si la tecla correspondiente esta presionada
@@ -152,30 +151,30 @@ void Game::update() {
 
     // aplicar logica de para sprites de jugador
     if (sRect.moveDOWN)
-        currentRow = (textureheight / 5) * 1; // (altura de la textura / cantidad de filas) * fila deseada
+        playerSprite.currentRow = (playerSprite.textureheight / 5) * 1; // (altura de la textura / cantidad de filas) * fila deseada
     else if (sRect.moveUP)
-        currentRow = (textureheight / 5) * 2; // (altura de la textura / cantidad de filas) * fila deseada
+        playerSprite.currentRow = (playerSprite.textureheight / 5) * 2; // (altura de la textura / cantidad de filas) * fila deseada
     else if (sRect.moveLEFT)
-        currentRow = (textureheight / 5) * 3; // (altura de la textura / cantidad de filas) * fila deseada
+        playerSprite.currentRow = (playerSprite.textureheight / 5) * 3; // (altura de la textura / cantidad de filas) * fila deseada
     else if (sRect.moveRIGHT)
-        currentRow = (textureheight / 5) * 4; // (altura de la textura / cantidad de filas) * fila deseada
+        playerSprite.currentRow = (playerSprite.textureheight / 5) * 4; // (altura de la textura / cantidad de filas) * fila deseada
     else
     {
-        currentRow = 0; // fila 0 (idle)
-        currentframe = (int)((SDL_GetTicks() / 1000) % 6); // 6 frames en las filas (idle) un poco mas lento
+        playerSprite.currentRow = 0; // fila 0 (idle)
+        playerSprite.currentframe = (int)((SDL_GetTicks() / 1000) % 6); // 6 frames en las filas (idle) un poco mas lento
     }
 
-    frameheight = textureheight / 5; // alto de cada frame
-    framewidth = texturewidth / 6; // ancho de cada frame
+    playerSprite.frameheight = playerSprite.textureheight / 5; // alto de cada frame
+    playerSprite.framewidth = playerSprite.texturewidth / 6; // ancho de cada frame
 
     // definir rectangulos de origen y destino para renderizar la textura
-    srcRect = {
-        currentframe * framewidth, // mover frame en la fila actual
-        currentRow, // fila actual
-        framewidth, // ancho de cada frame
-        frameheight // alto de cada frame
+    sRect.srcRect = {
+        playerSprite.currentframe * playerSprite.framewidth, // mover frame en la fila actual
+        playerSprite.currentRow, // fila actual
+        playerSprite.framewidth, // ancho de cada frame
+        playerSprite.frameheight // alto de cada frame
     };
-    dstRect = {
+    sRect.dstRect = {
         (int)(sRect.x - sRect.width * zoom / 2), // posicion x para aplicar movimiento y centrar el zoom
         (int)(sRect.y - sRect.height * zoom / 2), // posicion y para aplicar movimiento y centrar el zoom
         (int)(sRect.width * zoom), // aplicar zoom al ancho del sRect
@@ -186,7 +185,7 @@ void Game::update() {
     rRect = { 300, 400, 50, 50 }; // rectangulo para colision
 
     // checkeo colisiones
-    if (check_collision(dstRect, rRect) == 1) {
+    if (check_collision(sRect.dstRect, rRect) == 1) {
         collision_flag = true;
     } else {
         collision_flag = false;
@@ -201,26 +200,23 @@ void Game::render() {
     // aqui se comienzan a dibujar los objetos del juego
 
     // cargar ancho y alto de spriteTexture en texturewidth y textureheight
-    SDL_QueryTexture(spriteTexture, NULL, NULL, &texturewidth, &textureheight);
+    SDL_QueryTexture(playerSprite.spriteTexture, NULL, NULL, &playerSprite.texturewidth, &playerSprite.textureheight);
 
     // renderizar la textura del jugador con el rectagulo de destino modificado
-    SDL_RenderCopy(renderer, spriteTexture, &srcRect, &dstRect);
+    SDL_RenderCopy(renderer, playerSprite.spriteTexture, &sRect.srcRect, &sRect.dstRect);
 
     // renderizar el rectangulo perimetro del dstRect
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // color verde
-    SDL_RenderDrawRect(renderer, &dstRect);
+    SDL_RenderDrawRect(renderer, &sRect.dstRect);
 
     // rectangulo estatico para colision
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // color rojo
     SDL_RenderDrawRect(renderer, &rRect);
 
     // renderizar dialogo de colision
-    /*
     if (collision_flag) {
-        SDL_RenderCopy(renderer, surfaceText, NULL, &dialogRect);
-        dialog_box("Hola Mundo", rRect.x, rRect.y, 100, 50, 24);
+        dialog_box("Hola bebeeeee...");
     }
-    */
 
     // mostrar el renderizado
     SDL_RenderPresent(renderer);
@@ -243,17 +239,6 @@ SDL_Texture *Game::load_texture(const char* path) {
     return texture;
 }
 
-// cargar una fuente de letras
-TTF_Font *Game::load_font(const char *path, int size) {
-    font = TTF_OpenFont(path, size);
-    if (!font) {
-        printf("Error loading font: %s\n", TTF_GetError());
-        return NULL;
-    }
-
-    return font;
- }
-
 // checkear colision entre dos rectangulos
 int Game::check_collision(SDL_Rect myRect, SDL_Rect rect) {
     // colision entre rectangulos
@@ -270,27 +255,58 @@ int Game::check_collision(SDL_Rect myRect, SDL_Rect rect) {
     return 0;
 }
 
+// cargar una fuente de letras
+TTF_Font *Game::load_font(const char *path, int size) {
+   bubbletxt.font = TTF_OpenFont(path, size);
+    if (!bubbletxt.font) {
+        printf("Error loading font: %s\n", TTF_GetError());
+        return NULL;
+    }
+
+    return bubbletxt.font;
+ }
+
 // mostrar un dialogo en pantalla
-/*
-void Game::dialog_box(const char *message, int x, int y, int w, int h, int size) {
-    dialogRect = { x + 50, y - 10, w, h };
+void Game::dialog_box(const char *message) {
+
+    bubbletxt.sizeFont = 24; // tamano de la fuente
+    bubbletxt.font = load_font("./Fonts/font_small.ttf", bubbletxt.sizeFont); // cargar fuente de texto
+
+    bubbletxt.h_font = bubbletxt.sizeFont; // altura del dialogo
+    bubbletxt.w_font = (strlen(message) * bubbletxt.sizeFont); // ancho del dialogo
+
+    // rectangulo del dialogo
+    bubbletxt.dialogRect = {
+        (WINDOW_WIDTH / 2) - (bubbletxt.w_font / 2),
+        WINDOW_HEIGHT - bubbletxt.h_font * 4,
+        bubbletxt.w_font,
+        bubbletxt.h_font * 2
+    };
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // color blanco
-    SDL_RenderFillRect(renderer, &dialogRect);
+    SDL_RenderFillRect(renderer, &bubbletxt.dialogRect);
 
-    textColor = { 0, 0, 0, 255 }; // color negro
-    textSurface = TTF_RenderText_Solid(font, message, textColor);
+    bubbletxt.textColor = { 0, 0, 0, 255 }; // color negro
+    bubbletxt.textSurface = TTF_RenderText_Solid(bubbletxt.font, message, bubbletxt.textColor);
+
+    TTF_SizeText(bubbletxt.font, message, &bubbletxt.textW, &bubbletxt.textH);
+    bubbletxt.text_x = bubbletxt.dialogRect.x + (bubbletxt.dialogRect.w - bubbletxt.textW) / 2;
+    bubbletxt.text_y = bubbletxt.dialogRect.y + (bubbletxt.dialogRect.h - bubbletxt.textH) / 2; 
 
     // crear textura a partir de superficie de texto
-    surfaceText = SDL_CreateTextureFromSurface(renderer, textSurface);
-    SDL_FreeSurface(textSurface);
+    bubbletxt.surfaceText = SDL_CreateTextureFromSurface(renderer, bubbletxt.textSurface);
+    SDL_FreeSurface(bubbletxt.textSurface);
+
+    // textura del mensaje en la posicion calculada
+    SDL_Rect textRect = { bubbletxt.text_x, bubbletxt.text_y, bubbletxt.textW, bubbletxt.textH }; 
+    // renderizar la textura del mensaje en el rectangulo del dialogo
+    SDL_RenderCopy(renderer, bubbletxt.surfaceText, NULL, &textRect);
 }
-*/
 
 // destruir la ventana del juego
 void Game::destroy_window() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    TTF_Quit();
-    SDL_Quit();
+    TTF_Quit(); // cerrar el subsistema de manejo de fuentes de texto
+    SDL_Quit(); // cerrar SDL y limpiar cualquier recurso utilizado por SDL
 }

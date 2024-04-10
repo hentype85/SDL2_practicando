@@ -33,53 +33,64 @@ class Game {
         void destroy_window();
         SDL_Texture *load_texture(const char *path);
         int check_collision(SDL_Rect myRect, SDL_Rect rect);
-        void dialog_box(const char *message, int x, int y, int w, int h, int size);
+        void dialog_box(const char *message);
         TTF_Font *load_font(const char *path, int size);
 
         // variables publicas
+
+        // flag para saber si el juego esta corriendo
         int game_is_running;
 
         // rectangulo de colision
         SDL_Rect rRect;
 
+        // burbuja de dialogo
+        struct bubbleDialogTxt
+        {
+            SDL_Rect dialogRect;
+            SDL_Color textColor;
+            SDL_Surface *textSurface;
+            SDL_Texture *surfaceText;
+            TTF_Font *font;
+            int sizeFont, h_font, w_font;
+            int textW, textH, text_x, text_y;
+
+        } bubbletxt;    
+
+        // struct para rectangulo de jugador
+        struct sRect
+        {
+            SDL_Rect srcRect;
+            SDL_Rect dstRect;
+            bool moveUP, moveDOWN, moveLEFT, moveRIGHT;
+            float x, y, width, height, angle, spd;
+            float mousePosX, mousePosY;
+        } sRect;
+
+        // manejo de sprites del jugador
+        struct playerSpriteManager
+        {
+            SDL_Texture *spriteTexture;
+            SDL_Texture *texture;
+            int framewidth, frameheight;
+            int texturewidth, textureheight;
+            int currentframe;
+            int currentRow;
+        } playerSprite;
+
+
     private:
 
         // variables privadas
+
         SDL_Window *window;
         SDL_Renderer *renderer;
 
         float delta_time;
         int last_frame_time;
 
-        SDL_Texture *spriteTexture;
-
-        SDL_Surface *textSurface;
-        SDL_Texture *surfaceText;
-        TTF_Font *font;
-    
         float zoom;
-        int framewidth, frameheight;
-        int texturewidth, textureheight;
-        int currentframe;
-        int currentRow;
         bool collision_flag;
-
-        // rectangulo de dialogo
-        SDL_Rect dialogRect;
-        SDL_Color textColor;
-
-        // rectangulos para jugador
-        SDL_Rect srcRect;
-        SDL_Rect dstRect;     
-
-        // struct para rectangulo de jugador
-        struct sRect
-        {
-            bool moveUP, moveDOWN, moveLEFT, moveRIGHT;
-            float x, y, width, height, angle, spd;
-            float mousePosX, mousePosY;
-        } sRect;
-
 };
 
 #endif
