@@ -14,14 +14,24 @@ https://www.libsdl.org/projects/SDL_image/release
 descargar: SDL2_image-devel-2.8.2-mingw.zip  
 copiar:  
     \include desde - \SDL2_image-devel-2.8.2-mingw\SDL2_image-2.8.2\x86_64-w64-mingw32\include  
-    \lib desde - \SDL2_image-devel-2.8.2-mingw\SDL2_image-2.8.2\x86_64-w64-mingw32\lib  
+    \lib desde - \SDL2_image-devel-2.8.2-mingw\SDL2_image-2.8.2\x86_64-w64-mingw32\lib
     SDL2_image.dll desde - \SDL2_image-devel-2.8.2-mingw\SDL2_image-2.8.2\x86_64-w64-mingw32\bin  
 pegar:  
     \include en - \SDL2_practicando\SDL2\include  
     \lib en - \SDL2_practicando\SDL2\lib  
-    SDL2_image.dll junto con SDL2.dll  
-    (ejemplo: 06_SDL2)  
-    
+    SDL2_image.dll junto con SDL2.dll    
+
+# SDL_ttf
+https://www.libsdl.org/projects/SDL_ttf/release/  
+descargar: SDL2_ttf-devel-2.22.0-mingw.zip  
+copiar:  
+    \include desde - \SDL2_ttf-2.22.0/x86_64-w64-mingw32/include  
+    \lib desde - \SDL2_ttf-devel-2.22.0-mingw.zip\SDL2_ttf-2.22.0\x86_64-w64-mingw32\lib  
+    SDL2_ttf.dll desde - \SDL2_ttf-devel-2.22.0-mingw.zip\SDL2_ttf-2.22.0\x86_64-w64-mingw32\bin  
+pegar:  
+    \include en - \SDL2_practicando\SDL2\include  
+    \lib en - \SDL2_practicando\SDL2\lib   
+    SDL2_image.dll junto con SDL2.dll     
 
 # usar g++ con MinGW
 https://code.visualstudio.com/docs/cpp/config-mingw#_prerequisites  
