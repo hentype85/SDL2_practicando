@@ -4,6 +4,11 @@
 
 `g++ -o game main.cpp Classes/* -I ../SDL2/include -L ../SDL2/lib -lmingw32 -lSDL2main -lSDL2_image -lSDL2_ttf -lSDL2`
 
+Agregar a directorio raiz:  
+    SDL2_image.dll  
+    SDL2_ttf.dll  
+    SDL2.dll
+
 ```
 g++ -o game main.cpp Classes/* -I ../SDL2/include -L ../SDL2/lib -lmingw32 -lSDL2main -lSDL2_image -lSDL2_ttf -lSDL2
 

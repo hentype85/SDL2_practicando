@@ -1,8 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#define WINDOW_WIDTH 1800
+#define WINDOW_HEIGHT 700
 #define FALSE 0
 #define TRUE 1
 
@@ -33,6 +33,7 @@ class Game {
         void destroy_window();
         SDL_Texture *load_texture(const char *path);
         int check_collision(SDL_Rect myRect, SDL_Rect rect);
+        int check_collision_mssg(SDL_Rect myRect, SDL_Rect rect);
         void dialog_box(const char *message);
         TTF_Font *load_font(const char *path, int size);
 
@@ -54,7 +55,8 @@ class Game {
             TTF_Font *font;
             int sizeFont, h_font, w_font;
             int textW, textH, text_x, text_y;
-
+            SDL_Rect messageRect;
+            bool collision_flag_mssg;
         } bubbletxt;    
 
         // struct para rectangulo de jugador
@@ -91,6 +93,7 @@ class Game {
 
         float zoom;
         bool collision_flag;
+        bool collision_flag_mssg;
 };
 
 #endif

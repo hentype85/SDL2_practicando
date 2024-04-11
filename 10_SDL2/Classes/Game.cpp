@@ -117,8 +117,9 @@ void Game::setup() {
     playerSprite.currentRow = 0;
     zoom = 6.0f;
     rRect = { 0, 0, 0, 0 };
-    // flag de colision
+    // flags de colision
     collision_flag = false;
+    collision_flag_mssg = false;
     // para fuente de letras
     bubbletxt.dialogRect = { 0, 0, 0, 0 }; // rectangulo de dialogo
     bubbletxt.textColor = { 0, 0, 0, 255 }; // color del texto
@@ -139,14 +140,18 @@ void Game::update() {
 
 
     // aplicar movimiento utilizando delta_time solo si la tecla correspondiente esta presionada
-    if (sRect.moveUP)
+    if (sRect.moveUP) {
         sRect.y -= sRect.spd * delta_time;
-    if (sRect.moveDOWN)
+    }
+    if (sRect.moveDOWN) {
         sRect.y += sRect.spd * delta_time;
-    if (sRect.moveLEFT)
+    }
+    if (sRect.moveLEFT) {
         sRect.x -= sRect.spd * delta_time;
-    if (sRect.moveRIGHT)
+    }
+    if (sRect.moveRIGHT) {
         sRect.x += sRect.spd * delta_time;
+    }
 
 
     // aplicar logica de para sprites de jugador
@@ -182,13 +187,29 @@ void Game::update() {
     };
 
 
+    // rectangulo para habilitar mensaje en colision
+    bubbletxt.messageRect = {
+        (int)(sRect.x - sRect.width * zoom),
+        (int)(sRect.y - sRect.height * zoom),
+        (int)(sRect.width * zoom * 2), // duplicar el ancho del sRect
+        (int)(sRect.height * zoom * 2) // duplicar el alto del sRect
+    };
+
+
     rRect = { 300, 400, 50, 50 }; // rectangulo para colision
 
-    // checkeo colisiones
+    // checkeo colisiones del jugador con el rectangulo estatico
     if (check_collision(sRect.dstRect, rRect) == 1) {
         collision_flag = true;
     } else {
         collision_flag = false;
+    }
+
+    // checkeo colisiones para mensajes con el rectangulo estatico
+    if (check_collision_mssg(bubbletxt.messageRect, rRect) == 1) {
+        collision_flag_mssg = true;
+    } else {
+        collision_flag_mssg = false;
     }
 }
 
@@ -209,13 +230,17 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // color verde
     SDL_RenderDrawRect(renderer, &sRect.dstRect);
 
-    // rectangulo estatico para colision
+    // renderizar el rectangulo perimetro del mensaje
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255); // color azul
+    SDL_RenderDrawRect(renderer, &bubbletxt.messageRect);
+
+    // renderizar el rectangulo estatico para colision
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // color rojo
     SDL_RenderDrawRect(renderer, &rRect);
 
     // renderizar dialogo de colision
-    if (collision_flag) {
-        dialog_box("Hola bebeeeee...");
+    if (collision_flag_mssg) {
+        dialog_box("Hola bebeee...");
     }
 
     // mostrar el renderizado
@@ -249,6 +274,16 @@ int Game::check_collision(SDL_Rect myRect, SDL_Rect rect) {
         if (sRect.moveLEFT) sRect.x += sRect.spd * delta_time;
         if (sRect.moveRIGHT) sRect.x -= sRect.spd * delta_time;
 
+        return 1;
+    }
+
+    return 0;
+}
+
+// checkear colision entre dos rectangulos
+int Game::check_collision_mssg(SDL_Rect myRect, SDL_Rect rect) {
+    // colision entre rectangulos
+    if (SDL_HasIntersection(&myRect, &rect)) {
         return 1;
     }
 
