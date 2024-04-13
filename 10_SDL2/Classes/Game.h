@@ -1,8 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#define WINDOW_WIDTH 1800
-#define WINDOW_HEIGHT 700
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
 #define FALSE 0
 #define TRUE 1
 
