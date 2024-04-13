@@ -57,6 +57,7 @@ class Game {
             int total_frames;
             int total_rows;
             int frames_per_row;
+            int animation_spd;
         } spriteManager;
 
         float zoom;

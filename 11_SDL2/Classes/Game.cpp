@@ -78,15 +78,19 @@ void Game::update() {
     // tiempo actual en milisegundos
     last_frame_time = SDL_GetTicks();
 
-    // calcular el frame actual y la fila actual
+    // inicializar configuracion de animacion de sprites
     spriteManager.total_frames = 4; // total de frames por fila
     spriteManager.total_rows = 9; // total de filas
-    spriteManager.frames_per_row = spriteManager.total_frames * spriteManager.total_rows;
+    spriteManager.animation_spd = 1000 / 12; // velocidad de animacion en milisegundos dividido frames (12) por segundo
 
-    spriteManager.currentframe = (int)((last_frame_time / 100 % spriteManager.frames_per_row));
-    spriteManager.currentRow = spriteManager.currentframe / spriteManager.total_frames;
+    spriteManager.frames_per_row = spriteManager.total_frames * spriteManager.total_rows; // frames por fila
+
+    // calcular el frame actual y la fila actual
+    spriteManager.currentframe = (int)((last_frame_time / spriteManager.animation_spd % spriteManager.frames_per_row)); // frame actual
+    spriteManager.currentRow = spriteManager.currentframe / spriteManager.total_frames; // fila actual
 
     printf("Frame: %d, Row: %d\n", spriteManager.currentframe % spriteManager.total_frames, spriteManager.currentRow);
+
 
     // ancho y alto de cada frame
     spriteManager.framewidth = spriteManager.texturewidth / spriteManager.total_frames; // ancho de cada frame
