@@ -74,29 +74,28 @@ void Game::update() {
     // esperar hasta que sea tiempo de renderizar el siguiente frame
     while (!SDL_TICKS_PASSED(SDL_GetTicks(), last_frame_time + FRAME_TARGET_TIME));
     // delta time es la diferencia de tiempo entre frames en segundos
-    delta_time = (SDL_GetTicks() - last_frame_time) / 1000.0f;
+    // delta_time = (SDL_GetTicks() - last_frame_time) / 1000.0f;
     // tiempo actual en milisegundos
     last_frame_time = SDL_GetTicks();
 
     // inicializar configuracion de animacion de sprites
     spriteManager.total_frames = 4; // total de frames por fila
     spriteManager.total_rows = 9; // total de filas
-    spriteManager.animation_spd = 1000 / 12; // velocidad de animacion en milisegundos dividido frames (12) por segundo
+    spriteManager.animation_spd = 1000 / spriteManager.total_rows; // velocidad de animacion = 1000 milisegundos dividido por el total de filas
 
     spriteManager.frames_per_row = spriteManager.total_frames * spriteManager.total_rows; // frames por fila
 
     // calcular el frame actual y la fila actual
-    spriteManager.currentframe = (int)((last_frame_time / spriteManager.animation_spd % spriteManager.frames_per_row)); // frame actual
+    spriteManager.currentframe = (int)(((last_frame_time / spriteManager.animation_spd) % spriteManager.frames_per_row)); // frame actual
     spriteManager.currentRow = spriteManager.currentframe / spriteManager.total_frames; // fila actual
 
     printf("Frame: %d, Row: %d\n", spriteManager.currentframe % spriteManager.total_frames, spriteManager.currentRow);
-
 
     // ancho y alto de cada frame
     spriteManager.framewidth = spriteManager.texturewidth / spriteManager.total_frames; // ancho de cada frame
     spriteManager.frameheight = spriteManager.textureheight / spriteManager.total_rows; // alto de cada frame
 
-    // Definir rectángulos de origen y destino para renderizar la textura
+    // definir rectangulos de origen y destino para renderizar la textura
     sRect.srcRect = {
         (spriteManager.currentframe % spriteManager.total_frames) * spriteManager.framewidth, // posicion x del frame actual
         spriteManager.currentRow * spriteManager.frameheight, // fila actual
@@ -112,9 +111,9 @@ void Game::update() {
 
 }
 
-
 void Game::render() {
-    // limpiar la pantalla
+    // limpiar la pantalla (renderer, <Red>, <Green>, <Blue>, <Alpha/Transparencia>)
+    SDL_SetRenderDrawColor(renderer, 41, 129, 6, 255); // color verde oscuro
     SDL_RenderClear(renderer);
 
     // aqui se comienzan a dibujar los objetos del juego
