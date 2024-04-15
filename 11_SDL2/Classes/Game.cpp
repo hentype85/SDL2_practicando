@@ -67,6 +67,7 @@ void Game::setup() {
     spriteManager.spriteTexture = load_texture("./Sprites/intro00.png");
     spriteManager.currentframe = 0;
     spriteManager.currentRow = 0;
+    // zoom inicial de la animacion
     zoom = 1.0f;
 }
 

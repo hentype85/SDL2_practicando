@@ -23,7 +23,8 @@ class Game {
         Game(); // constructor
         ~Game(); // destructor
 
-        // metodos publicos
+        /* metodos publicos */
+
         void initialize_window();
         void setup();
         void process_input();
@@ -32,10 +33,9 @@ class Game {
         void destroy_window();
         SDL_Texture *load_texture(const char *path);
 
-        // variables publicas
+        /* variables publicas */
 
-        // flag para saber si el juego esta corriendo
-        int game_is_running; 
+        int game_is_running; // flag para saber si el juego esta corriendo
 
         // struct para rectangulo de animacion
         struct sRect
@@ -60,7 +60,7 @@ class Game {
             int animation_spd;
         } spriteManager;
 
-        float zoom;
+        float zoom; // zoom de la animacion
 
     private:
 
