@@ -122,7 +122,7 @@ void Game::render() {
     // cargar ancho y alto de spriteTexture en texturewidth y textureheight
     SDL_QueryTexture(spriteManager.spriteTexture, NULL, NULL, &spriteManager.texturewidth, &spriteManager.textureheight);
 
-    // renderizar la textura del jugador con el rectagulo de destino modificado
+    // renderizar la textura de animacion con el rectagulo de destino modificado
     SDL_RenderCopy(renderer, spriteManager.spriteTexture, &sRect.srcRect, &sRect.dstRect);
 
     // mostrar el renderizado
