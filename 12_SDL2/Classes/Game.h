@@ -6,10 +6,8 @@
 #define FALSE 0
 #define TRUE 1
 
-#define FPS 60 // frames por segundo gameplay
-#define FPS_CUTSCENE 24 // frames por segundo cutscene
-#define FRAME_TARGET_TIME (1000 / FPS) // un segundo dividido por los frames por segundo del gameplay
-#define FRAME_TARGE_TIME_CUTSCENE (1000 / FPS_CUTSCENE) // un segundo dividido por los frames por segundo de la cutscene
+#define FPS 60 // frames por segundo
+#define FRAME_TARGET_TIME (1000 / FPS) // un segundo dividido por los frames por segundo
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

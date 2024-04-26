@@ -74,7 +74,7 @@ void Game::setup() {
 
 void Game::update() {
     // esperar hasta que sea tiempo de renderizar el siguiente frame
-    while (!SDL_TICKS_PASSED(SDL_GetTicks(), last_frame_time + FRAME_TARGE_TIME_CUTSCENE));
+    while (!SDL_TICKS_PASSED(SDL_GetTicks(), last_frame_time + FRAME_TARGET_TIME));
     // delta time es la diferencia de tiempo entre frames en segundos
     delta_time = (SDL_GetTicks() - last_frame_time) / 1000.0f;
     // tiempo actual en milisegundos
