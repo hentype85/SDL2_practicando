@@ -74,7 +74,7 @@ void Game::setup() {
 
 void Game::update() {
     // esperar hasta que sea tiempo de renderizar el siguiente frame
-    while (!SDL_TICKS_PASSED(SDL_GetTicks(), last_frame_time + FRAME_TARGET_TIME));
+    while (!SDL_TICKS_PASSED(SDL_GetTicks(), last_frame_time + FRAME_TARGE_TIME_CUTSCENE));
     // delta time es la diferencia de tiempo entre frames en segundos
     delta_time = (SDL_GetTicks() - last_frame_time) / 1000.0f;
     // tiempo actual en milisegundos
@@ -143,6 +143,7 @@ void Game::intro_state() {
     spriteManager.framewidth = spriteManager.texturewidth / spriteManager.total_frames; // ancho de cada frame
     spriteManager.frameheight = spriteManager.textureheight / spriteManager.total_rows; // alto de cada frame
 
+
     // definir rectangulos de origen y destino para renderizar la textura
     sRect.srcRect = {
         (spriteManager.currentframe % spriteManager.total_frames) * spriteManager.framewidth, // posicion x del frame actual
@@ -156,6 +157,7 @@ void Game::intro_state() {
         (int)(sRect.width * zoom), // aplicar zoom al ancho del sRect
         (int)(sRect.height * zoom) // aplicar zoom al alto del sRect
     };
+
 
     // cambiar de estado cuando la animacion de sprites haya terminado
     if (spriteManager.currentframe == spriteManager.frames_per_row - 1 && spriteManager.currentRow == spriteManager.total_rows - 1) {
